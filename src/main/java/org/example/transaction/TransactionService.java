@@ -29,16 +29,19 @@ public class TransactionService {
                         "SET balance = balance + ? " +
                         "WHERE account_number = ?";
 
+        // ask
         String transactionQuery =
                 "INSERT INTO bank_transaction " +
                         "(account_id, transaction_type, amount) " +
-                        "SELECT account_id, ?, ? " +
+                        "SELECT account_id, ?, ? " + //
                         "FROM accounts " +
                         "WHERE account_number = ?";
+
 
         try {
 
             connection.setAutoCommit(false); // skip still
+
 
             // Step 1: Update balance
             try (PreparedStatement ps =
@@ -73,7 +76,7 @@ public class TransactionService {
             System.out.println("Deposit successful.");
             System.out.println("Amount deposited: " + amount);
 
-        } catch (SQLException e) {
+        } catch (SQLException e) {       // ask
 
             try {
                 connection.rollback();
@@ -124,13 +127,14 @@ public class TransactionService {
 
         String updateBalanceQuery =
                 "UPDATE accounts " +
-                        "SET balance = balance - ? " +
+                        "SET balance = balance - ? " +      //   update balance
                         "WHERE account_id = ?";
 
         String transactionQuery =
                 "INSERT INTO bank_transaction " +
                         "(account_id, transaction_type, amount) " +
                         "VALUES (?, ?, ?)";
+
 
         try {
 
@@ -177,7 +181,7 @@ public class TransactionService {
                 ps.setBigDecimal(1, amount);
                 ps.setInt(2, accountId);
 
-                int rows = ps.executeUpdate();
+                int rows = ps.executeUpdate(); // ask
 
                 if (rows == 0) {
                     connection.rollback();
@@ -202,6 +206,8 @@ public class TransactionService {
 
             System.out.println("Withdrawal successful.");
             System.out.println("Amount withdrawn: " + amount);
+
+
 
         } catch (SQLException e) {
 
@@ -239,7 +245,7 @@ public class TransactionService {
     public void getTransactions(String accountNumber) {
 
         String query =
-                "SELECT bt.transaction_id, " +
+                "SELECT bt.transaction_id, " +       // ask
                         "bt.transaction_type, " +
                         "bt.amount, " +
                         "bt.transaction_date " +

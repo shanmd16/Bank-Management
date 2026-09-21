@@ -59,6 +59,39 @@ public class SetupDatabase
 //
 //}
 
+//    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+//    account_id INT NOT NULL,
+//    transaction_type VARCHAR(20) NOT NULL,
+//    amount DECIMAL(12,2) NOT NULL,
+//    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//
+//    FOREIGN KEY (account_id) REFERENCES account(account_id)
+//        );
+
+
+    public void createTransactionTable() throws SQLException {
+        String transactionQuery = "CREATE TABLE IF NOT EXISTS TRANSACTION (" +
+                                  "transaction_id INT AUTO_INCREMENT PRIMARY KEY," +
+                                   "transaction_type VARCHAR(20) NOT NULL," +
+                                   "amount DECIMAL(12,2) NOT NULL," +
+                                  "transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                "FOREIGN KEY (account_id) REFERENCES account(account_id))";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(transactionQuery)) {
+
+            preparedStatement.execute();
+            System.out.println("Transaction Table Created successfully");
+        }
+        catch (SQLException e) {
+
+            System.out.println(
+                    "Error while creating Transaction Table: "
+                            + e.getMessage()
+            );
+        }
+
+    }
+
 
     public void createAccountTable() {
 

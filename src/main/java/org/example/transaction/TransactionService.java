@@ -13,13 +13,14 @@ public class TransactionService {
         this.connection = CreateConnection.getConnection();
     }
 
+
     // =========================================================
     // 1. DEPOSIT
     // =========================================================
 
     public void deposit(String accountNumber, BigDecimal amount) {
 
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 1000) {
+        if (amount == null || amount.compareTo(new BigDecimal("500")) <  0) {
             System.out.println("Deposit amount must be greater than 1000.");
             return;
         }
@@ -31,7 +32,7 @@ public class TransactionService {
 
         // ask
         String transactionQuery =
-                "INSERT INTO bank_transaction " +
+                "INSERT INTO transactions " +
                         "(account_id, transaction_type, amount) " +
                         "SELECT account_id, ?, ? " + //
                         "FROM accounts " +
@@ -47,8 +48,8 @@ public class TransactionService {
             try (PreparedStatement ps =
                          connection.prepareStatement(updateBalanceQuery)) {
 
-                ps.setString(1, accountNumber);
-                ps.setBigDecimal(2, amount);
+                ps.setString(2, accountNumber);
+                ps.setBigDecimal(1, amount);
 
                 int rows = ps.executeUpdate();
 
@@ -114,7 +115,7 @@ public class TransactionService {
             String pin,
             BigDecimal amount) {
 
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 500) {
+        if (amount == null || amount.compareTo(new BigDecimal("500")) < 0) {
             System.out.println("Withdrawal amount must be greater than 500.");
             return;
         }
@@ -131,7 +132,7 @@ public class TransactionService {
                         "WHERE account_id = ?";
 
         String transactionQuery =
-                "INSERT INTO bank_transaction " +
+                "INSERT INTO transactions " +
                         "(account_id, transaction_type, amount) " +
                         "VALUES (?, ?, ?)";
 
@@ -166,7 +167,7 @@ public class TransactionService {
             }
 
             // Step 2: Check sufficient balance
-            if (currentBalance.compareTo(amount) < 500) {
+            if (currentBalance.compareTo(amount) < 0) {
 
                 System.out.println("Insufficient balance.");
 
@@ -249,7 +250,7 @@ public class TransactionService {
                         "bt.transaction_type, " +
                         "bt.amount, " +
                         "bt.transaction_date " +
-                        "FROM bank_transaction bt " +
+                        "FROM transactions bt " +
                         "JOIN accounts a " +
                         "ON bt.account_id = a.account_id " +
                         "WHERE a.account_number = ? " +
@@ -317,7 +318,7 @@ public class TransactionService {
         String query =
                 "SELECT transaction_id, account_id, " +
                         "transaction_type, amount, transaction_date " +
-                        "FROM bank_transaction " +
+                        "FROM transactions " +
                         "WHERE transaction_id = ?";
 
         try (PreparedStatement ps =

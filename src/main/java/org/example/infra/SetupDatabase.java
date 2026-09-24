@@ -13,15 +13,6 @@ public class SetupDatabase
         connection = CreateConnection.getConnection();
     }
 
-//    public void insertIntoUser(String name, String email, String phone, String address ) throws SQLException {
-//        String insertSQLQuery = "Insert into User(name,email,phone,address) Values(?,?,?,?)";
-//      PreparedStatement  preparedStatement = connection.prepareStatement(insertSQLQuery);
-//      preparedStatement.setString(1,"John");
-//      preparedStatement.setString(2,"john@gmail.com");
-//      preparedStatement.setString(3,"8800009500");
-//      preparedStatement.setString(4,"Kotla Mevatiyan Hapur");
-//
-//    }
 
     public void createUserTable() {
 
@@ -48,34 +39,16 @@ public class SetupDatabase
         }
     }
 
-//public void insertIntoAccount(int user_id,String account_number,String account_type, String pin,Double balance) throws SQLException {
-//        String insertSQLQuery2 = "Insert Into Account(user_id,account_number,account_type,pin,balance) Values (?,?,?,?,?)";
-//        PreparedStatement preparedStatement = connection.prepareStatement(insertSQLQuery2);
-//        preparedStatement.setInt(1,1001);
-//        preparedStatement.setString(2,"000100010012");
-//        preparedStatement.setString(3,"Current Account ");
-//        preparedStatement.setString(4,"0205");
-//        preparedStatement.setDouble(5,500000.11);
-//
-//}
-
-//    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
-//    account_id INT NOT NULL,
-//    transaction_type VARCHAR(20) NOT NULL,
-//    amount DECIMAL(12,2) NOT NULL,
-//    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//
-//    FOREIGN KEY (account_id) REFERENCES account(account_id)
-//        );
 
 
     public void createTransactionTable() throws SQLException {
-        String transactionQuery = "CREATE TABLE IF NOT EXISTS TRANSACTION (" +
+        String transactionQuery = "CREATE TABLE IF NOT EXISTS transactions (" +
                                   "transaction_id INT AUTO_INCREMENT PRIMARY KEY," +
+                                    "account_id INT NOT NULL, " +
                                    "transaction_type VARCHAR(20) NOT NULL," +
                                    "amount DECIMAL(12,2) NOT NULL," +
                                   "transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                "FOREIGN KEY (account_id) REFERENCES account(account_id))";
+                "FOREIGN KEY (account_id) REFERENCES accounts(account_id))";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(transactionQuery)) {
 
@@ -119,7 +92,4 @@ public class SetupDatabase
             );
         }
     }
-
-
-
 }
